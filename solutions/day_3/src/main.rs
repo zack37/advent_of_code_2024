@@ -1,4 +1,12 @@
-use regex::Regex;
+use nom::{
+    branch::alt, bytes::complete::tag,
+    character::complete::{self, anychar},
+    combinator::value,
+    multi::{many1, many_till},
+    sequence::{delimited, separated_pair},
+    IResult,
+    Parser,
+};
 
 fn main() -> anyhow::Result<()> {
     #[cfg(feature = "part_1")]
@@ -10,58 +18,80 @@ fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn parse_input(input: &'static str) -> Vec<(i32, i32)> {
-    let RE = Regex::new(r#"mul\((\d+),(\d+)\)"#).unwrap();
-    let mut results: Vec<(i32, i32)> = vec![];
-    for (_, [x, y]) in RE.captures_iter(input).map(|c| c.extract()) {
-        results.push((x.parse::<i32>().unwrap(), y.parse::<i32>().unwrap()));
-    }
+fn mul(input: &'static str) -> IResult<&str, Instruction> {
+    let (input, _) = tag("mul")(input)?;
+    let (input, pair) = delimited(
+        tag("("),
+        separated_pair(complete::i32, tag(","), complete::i32),
+        tag(")"),
+    )(input)?;
 
-    println!("{results:?}");
+    Ok((input, Instruction::Mul(pair.0, pair.1)))
+}
 
-    results
+fn parse(input: &'static str) -> anyhow::Result<i32> {
+    let (_, value) = many1(many_till(anychar, mul).map(|(_discard, ins)| ins))(input)?;
+
+    Ok(value
+        .iter()
+        .map(|i| match i {
+            Instruction::Mul(x, y) => x * y,
+            _ => 0,
+        })
+        .sum())
 }
 
 #[cfg(feature = "part_1")]
 fn part_1() -> anyhow::Result<()> {
     println!("Day 3 part 1");
     let input = include_str!("inputs/sample.txt");
-    let answer: i32 = parse_input(input).into_iter().map(|(x, y)| x * y).sum();
+    let answer: i32 = parse(input)?;
 
     println!("Answer: {}", answer);
 
     Ok(())
 }
 
-fn parse_pt2_input(input: &'static str) -> Vec<(i32, i32)> {
-    let RE = Regex::new(r#"(do\(\))|(don't\(\))|mul\((\d+),(\d+)\)"#).unwrap();
-    let mut results: Vec<(i32, i32)> = vec![];
-    let mut enabled = true;
-    for matches in RE.captures_iter(input) {
-        if matches[0].eq("do()") {
-            enabled = true;
-        } else if matches[0].eq("don't()") {
-            enabled = false;
-            println!("disable that shit");
-        } else if enabled {
-            let x = matches[3].parse::<i32>().unwrap();
-            let y = matches[4].parse::<i32>().unwrap();
-            results.push((x, y));
-        }
-        println!("{matches:?}");
-        // results.push((x.parse::<i32>().unwrap(), y.parse::<i32>().unwrap()));
-    }
+#[derive(Debug, Clone)]
+enum Instruction {
+    Mul(i32, i32),
+    Do,
+    Dont,
+}
 
-    println!("{results:?}");
+fn instruction(input: &'static str) -> IResult<&str, Instruction> {
+    alt((
+        value(Instruction::Dont, tag("don't()")),
+        value(Instruction::Do, tag("do()")),
+        mul,
+    ))(input)
+}
 
-    results
+fn parse_pt2_input(input: &'static str) -> anyhow::Result<i32> {
+    let (_, value) = many1(many_till(anychar, instruction).map(|(_discard, ins)| ins))(input)?;
+
+    let (_, result) = value
+        .iter()
+        .fold((true, 0), |(enabled, result), ins| match ins {
+            Instruction::Mul(a, b) => {
+                if enabled {
+                    (enabled, result + a * b)
+                } else {
+                    (enabled, result)
+                }
+            }
+            Instruction::Do => (true, result),
+            Instruction::Dont => (false, result),
+        });
+
+    Ok(result)
 }
 
 #[cfg(feature = "part_2")]
 fn part_2() -> anyhow::Result<()> {
     println!("Day 3 part 2");
     let input = include_str!("inputs/input.txt");
-    let answer: i32 = parse_pt2_input(input).into_iter().map(|(x, y)| x * y).sum();
+    let answer = parse_pt2_input(input)?;
 
     println!("Answer: {}", answer);
 
