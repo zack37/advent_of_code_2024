@@ -1,8 +1,10 @@
 use anyhow::Context;
-use nom::character::complete::{char, digit1};
-use nom::combinator::map;
-use nom::multi::separated_list1;
-use nom::IResult;
+use nom::{
+    character::complete::{char, digit1},
+    combinator::map,
+    multi::separated_list1,
+    IResult,
+};
 
 fn main() -> anyhow::Result<()> {
     let input = include_str!("inputs/input.txt");
@@ -104,7 +106,7 @@ fn part_2(input: &'static str) -> anyhow::Result<()> {
     let parsed = parse_input(input)?;
 
     let mut safe = 0;
-    for mut line in parsed {
+    for line in parsed {
         if check_line(&line) {
             safe += 1;
             continue;
