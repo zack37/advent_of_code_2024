@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 
 fn main() {
-    println!("Hello, world!");
-
     let input = include_str!("inputs/input.txt");
 
     #[cfg(feature = "part_1")]

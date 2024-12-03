@@ -6,5 +6,6 @@ edition = "2021"
 [features]
 part_1=[]
 part_2=[]
+full=["part_1", "part_2"]
 
 [dependencies]

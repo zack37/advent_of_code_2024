@@ -1,3 +1,7 @@
 [workspace]
 members = ["solutions/*"]
 resolver = "2"
+
+[workspace.dependencies]
+anyhow="1.0.93"
+nom="7.1.2"
