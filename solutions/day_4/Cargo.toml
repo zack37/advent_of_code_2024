@@ -1,0 +1,13 @@
+[package]
+name = "day_4"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+nom.workspace = true
+
+[features]
+part_1=[]
+part_2=[]
+full=["part_1", "part_2"]

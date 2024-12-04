@@ -1,11 +1,11 @@
 use nom::{
-    branch::alt, bytes::complete::tag,
+    branch::alt,
+    bytes::complete::tag,
     character::complete::{self, anychar},
     combinator::value,
     multi::{many1, many_till},
     sequence::{delimited, separated_pair},
-    IResult,
-    Parser,
+    IResult, Parser,
 };
 
 fn main() -> anyhow::Result<()> {
@@ -18,7 +18,7 @@ fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn mul(input: &'static str) -> IResult<&str, Instruction> {
+fn mul(input: &'static str) -> IResult<&'static str, Instruction> {
     let (input, _) = tag("mul")(input)?;
     let (input, pair) = delimited(
         tag("("),
@@ -59,7 +59,7 @@ enum Instruction {
     Dont,
 }
 
-fn instruction(input: &'static str) -> IResult<&str, Instruction> {
+fn instruction(input: &'static str) -> IResult<&'static str, Instruction> {
     alt((
         value(Instruction::Dont, tag("don't()")),
         value(Instruction::Do, tag("do()")),
