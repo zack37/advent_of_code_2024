@@ -133,12 +133,14 @@ mod tests {
     use super::*;
 
     #[test]
+    #[cfg(feature = "part_1")]
     fn part_1_test() {
         let input = include_str!("inputs/sample.txt");
         assert_eq!(part_1(input).unwrap(), 2);
     }
 
     #[test]
+    #[cfg(feature = "part_2")]
     fn part_2_test() {
         let input = include_str!("inputs/sample.txt");
         assert_eq!(part_2(input).unwrap(), 4);

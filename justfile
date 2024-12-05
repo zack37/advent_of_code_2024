@@ -9,8 +9,8 @@ lint:
 run day part:
   cargo run -p {{day}} --features={{part}}
 
-test-all:
-   cargo nextest run --features=full
+test-all part='full':
+   cargo nextest run --features={{part}}
 
-test day:
-   cargo nextest run -p {{day}} --features=full
+test day part='full':
+   cargo nextest run -p {{day}} --features={{part}}
