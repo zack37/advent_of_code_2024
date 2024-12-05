@@ -10,10 +10,16 @@ fn main() -> anyhow::Result<()> {
     let input = include_str!("inputs/input.txt");
 
     #[cfg(feature = "part_1")]
-    part_1(input)?;
+    {
+        let answer = part_1(input)?;
+        println!("Part 1: {}", answer);
+    }
 
     #[cfg(feature = "part_2")]
-    part_2(input)?;
+    {
+        let answer = part_2(input)?;
+        println!("Part 2: {}", answer);
+    }
 
     Ok(())
 }
@@ -38,7 +44,7 @@ fn parse_input(input: &'static str) -> anyhow::Result<Vec<Vec<i32>>> {
 }
 
 #[cfg(feature = "part_1")]
-fn part_1(input: &'static str) -> anyhow::Result<()> {
+fn part_1(input: &'static str) -> anyhow::Result<i32> {
     let parsed = parse_input(input)?;
 
     let mut safe = 0;
@@ -67,9 +73,7 @@ fn part_1(input: &'static str) -> anyhow::Result<()> {
         safe += if is_safe { 1 } else { 0 };
     }
 
-    println!("Part 1: {}", safe);
-
-    Ok(())
+    Ok(safe)
 }
 
 enum Direction {
@@ -102,7 +106,7 @@ fn check_line(arr: &[i32]) -> bool {
 }
 
 #[cfg(feature = "part_2")]
-fn part_2(input: &'static str) -> anyhow::Result<()> {
+fn part_2(input: &'static str) -> anyhow::Result<i32> {
     let parsed = parse_input(input)?;
 
     let mut safe = 0;
@@ -121,7 +125,22 @@ fn part_2(input: &'static str) -> anyhow::Result<()> {
         }
     }
 
-    println!("Part 2: {}", safe);
+    Ok(safe)
+}
 
-    Ok(())
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn part_1_test() {
+        let input = include_str!("inputs/sample.txt");
+        assert_eq!(part_1(input).unwrap(), 2);
+    }
+
+    #[test]
+    fn part_2_test() {
+        let input = include_str!("inputs/sample.txt");
+        assert_eq!(part_2(input).unwrap(), 4);
+    }
 }

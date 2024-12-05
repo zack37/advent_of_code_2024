@@ -9,11 +9,18 @@ use nom::{
 };
 
 fn main() -> anyhow::Result<()> {
+    let input = include_str!("inputs/input.txt");
     #[cfg(feature = "part_1")]
-    part_1()?;
+    {
+        let answer = part_1(input)?;
+        println!("Part 1: {}", answer)
+    }
 
     #[cfg(feature = "part_2")]
-    part_2()?;
+    {
+        let answer = part_2(input)?;
+        println!("Part 2: {}", answer);
+    }
 
     Ok(())
 }
@@ -42,14 +49,10 @@ fn parse(input: &'static str) -> anyhow::Result<i32> {
 }
 
 #[cfg(feature = "part_1")]
-fn part_1() -> anyhow::Result<()> {
+fn part_1(input: &'static str) -> anyhow::Result<i32> {
     println!("Day 3 part 1");
-    let input = include_str!("inputs/sample.txt");
-    let answer: i32 = parse(input)?;
 
-    println!("Answer: {}", answer);
-
-    Ok(())
+    parse(input)
 }
 
 #[derive(Debug, Clone)]
@@ -88,12 +91,25 @@ fn parse_pt2_input(input: &'static str) -> anyhow::Result<i32> {
 }
 
 #[cfg(feature = "part_2")]
-fn part_2() -> anyhow::Result<()> {
+fn part_2(input: &'static str) -> anyhow::Result<i32> {
     println!("Day 3 part 2");
-    let input = include_str!("inputs/input.txt");
-    let answer = parse_pt2_input(input)?;
 
-    println!("Answer: {}", answer);
+    parse_pt2_input(input)
+}
 
-    Ok(())
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn part_1_test() {
+        let input = include_str!("inputs/sample.txt");
+        assert_eq!(part_1(input).unwrap(), 161);
+    }
+
+    #[test]
+    fn part_2_test() {
+        let input = include_str!("inputs/sample_2.txt");
+        assert_eq!(part_2(input).unwrap(), 48);
+    }
 }

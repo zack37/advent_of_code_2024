@@ -4,9 +4,15 @@ fn main() {
     let input = include_str!("inputs/input.txt");
 
     #[cfg(feature = "part_1")]
-    part_1(input);
+    {
+        let answer = part_1(input);
+        println!("Part 1: {}", answer);
+    }
     #[cfg(feature = "part_2")]
-    part_2(input);
+    {
+        let answer = part_2(input);
+        println!("Part 2: {}", answer);
+    }
 }
 
 fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {
@@ -21,31 +27,43 @@ fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {
 }
 
 #[cfg(feature = "part_1")]
-fn part_1(input: &str) {
+fn part_1(input: &str) -> i32 {
     let (mut left, mut right) = parse_input(input);
     left.sort();
     right.sort();
 
-    let answer: i32 = left
-        .into_iter()
+    left.into_iter()
         .zip(right)
         .map(|(l, r)| (l - r).abs())
-        .sum();
-    println!("Hello, part 1: {answer}");
+        .sum()
 }
 
 #[cfg(feature = "part_2")]
-fn part_2(input: &str) {
+fn part_2(input: &str) -> i32 {
     let (left, right) = parse_input(input);
     let mut occurences: HashMap<i32, i32> = HashMap::new();
     for x in right {
         occurences.entry(x).and_modify(|e| *e += 1).or_insert(1);
     }
 
-    let answer: i32 = left
-        .into_iter()
+    left.into_iter()
         .map(|l| l * occurences.get(&l).unwrap_or(&0))
-        .sum();
+        .sum()
+}
 
-    println!("Hello, part 2: {answer}");
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn part_1_test() {
+        let input = include_str!("inputs/sample.txt");
+        assert_eq!(part_1(input), 11);
+    }
+
+    #[test]
+    fn part_2_test() {
+        let input = include_str!("inputs/sample.txt");
+        assert_eq!(part_2(input), 31);
+    }
 }
