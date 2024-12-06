@@ -9,6 +9,9 @@ lint:
 run day part:
   cargo run -p {{day}} --features={{part}}
 
+run-release day part:
+  cargo run --release -p {{day}} --features={{part}}
+
 test-all part='full':
    cargo nextest run --features={{part}}
 

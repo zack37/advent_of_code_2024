@@ -1,11 +1,11 @@
 use std::{cmp::Ordering, collections::HashMap};
 
 use nom::{
+    IResult,
     bytes::complete::tag,
     character::{complete, complete::line_ending},
     multi::{fold_many1, separated_list1},
     sequence::{separated_pair, terminated},
-    IResult,
 };
 
 fn main() -> anyhow::Result<()> {

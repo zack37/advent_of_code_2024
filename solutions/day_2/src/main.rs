@@ -1,9 +1,9 @@
 use anyhow::Context;
 use nom::{
+    IResult,
     character::complete::{char, digit1},
     combinator::map,
     multi::separated_list1,
-    IResult,
 };
 
 fn main() -> anyhow::Result<()> {

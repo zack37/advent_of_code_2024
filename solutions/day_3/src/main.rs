@@ -1,11 +1,11 @@
 use nom::{
+    IResult, Parser,
     branch::alt,
     bytes::complete::tag,
     character::complete::{self, anychar},
     combinator::value,
-    multi::{many1, many_till},
+    multi::{many_till, many1},
     sequence::{delimited, separated_pair},
-    IResult, Parser,
 };
 
 fn main() -> anyhow::Result<()> {
