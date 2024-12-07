@@ -63,11 +63,11 @@ impl std::fmt::Display for Piece {
     }
 }
 
-fn find_guard(grid: &Vec<Vec<Piece>>) -> Option<((usize, usize), Piece)> {
-    for row in 0..grid.len() {
-        for col in 0..grid[row].len() {
-            if let Piece::Guard(_) = grid[row][col] {
-                return Some(((row, col), grid[row][col].clone()));
+fn find_guard(grid: &[Vec<Piece>]) -> Option<((usize, usize), Piece)> {
+    for (row, _) in grid.iter().enumerate() {
+        for (col, piece) in grid[row].iter().enumerate() {
+            if let Piece::Guard(_) = piece {
+                return Some(((row, col), piece.clone()));
             }
         }
     }
