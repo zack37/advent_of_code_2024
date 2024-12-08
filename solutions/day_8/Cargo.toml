@@ -1,0 +1,15 @@
+[package]
+name = "day_8"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+glam.workspace = true
+nom.workspace = true
+itertools.workspace = true
+
+[features]
+part_1=[]
+part_2=[]
+full=["part_1", "part_2"]
