@@ -2,6 +2,7 @@ use std::iter::successors;
 
 use glam::IVec2;
 use itertools::Itertools;
+use rayon::prelude::*;
 
 fn main() -> anyhow::Result<()> {
     let input = include_str!("inputs/input.txt");
@@ -84,7 +85,7 @@ fn part_2(input: &'static str) -> anyhow::Result<usize> {
                 .flat_map(|c| {
                     let diff = c[0].pos - c[1].pos;
 
-                    let first:Vec<_> = successors(Some(c[0].pos), |pos| {
+                    let first: Vec<_> = successors(Some(c[0].pos), |pos| {
                         let new_pos = pos + diff;
                         if x_bounds.contains(&pos.x) && y_bounds.contains(&pos.y) {
                             Some(new_pos)

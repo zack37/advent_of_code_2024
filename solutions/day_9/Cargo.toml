@@ -1,13 +1,10 @@
 [package]
-name = "day_8"
+name = "day_9"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 anyhow.workspace = true
-glam.workspace = true
-itertools.workspace = true
-rayon.workspace = true
 
 [features]
 part_1=[]
